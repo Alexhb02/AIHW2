@@ -25,20 +25,6 @@ public class AstarAgent extends Agent {
             this.cost = cost;
         }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
-        }
-
-        @Override
-        public boolean equals(Object object) {
-            if (!(object instanceof MapLocation))
-                return false;
-
-            MapLocation l2 = (MapLocation) object;
-
-            return this.x == l2.x && this.y == l2.y;
-        }
     }
 
     Stack<MapLocation> path;
@@ -345,74 +331,13 @@ public class AstarAgent extends Agent {
         pathCosts.put(start, heuristic(start, goal));
         openList.add(start);
 
-        while (!openList.isEmpty()) {
-            MapLocation curr = openList.poll();
-            if (curr.equals(goal)) {
-                return getPath(predecessor, curr, start);
-            }
-
-            Set<MapLocation> neighbors = getNeighbors(curr, xExtent, yExtent, tree_locations);
-            int tempscore = cheapestPath.get(curr) + 1;
-            for (MapLocation neighbor : neighbors) {
-                int cheapNeigh = Integer.MAX_VALUE;
-                if (cheapestPath.containsKey(neighbor))
-                    cheapNeigh = cheapestPath.get(neighbor);
-                if (tempscore < cheapNeigh) {
-                    predecessor.put(neighbor, curr);
-                    cheapestPath.put(neighbor, tempscore);
-                    pathCosts.put(neighbor, tempscore + heuristic(neighbor, goal));
-
-                    openList.add(neighbor);
-                }
-            }
-
-        }
-
-        System.out.println("No available path.");
-        System.exit(0);
-
         return null;
     }
 
-    private Stack<MapLocation> getPath(Map<MapLocation, MapLocation> predecessor, MapLocation loc, MapLocation start)
+    int heuristic(MapLocation l1, MapLocation goal)
     {
-        Stack<MapLocation> path = new Stack<MapLocation>();
-        MapLocation pred = predecessor.get(loc);
-        while (!pred.equals(start)) {
-            path.push(pred);
-            pred = predecessor.get(pred);
-        }
-
-        return path;
+        return 0;
     }
-
-    private int heuristic(MapLocation loc, MapLocation goal) {
-        return Math.max( Math.abs(goal.x - loc.x), Math.abs(goal.y - loc.y) );
-    }
-
-    private Set<MapLocation> getNeighbors(MapLocation currLoc, int xExtent, int yExtent, boolean[][] blockages)
-    {
-        Set<MapLocation> possibleMoves = new HashSet<>();
-
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) continue; // Ignore the step we are already at
-
-                int tx = currLoc.x + i;
-                int ty = currLoc.y + j;
-
-                if (tx >= 0 && ty >= 0 && tx < xExtent && ty < yExtent) {
-                    if (!blockages[tx][ty]) {
-                        MapLocation newLocation = new MapLocation(tx, ty, null, 1 + currLoc.cost);
-                        possibleMoves.add(newLocation);
-                    }
-                }
-            }
-        }
-
-        return possibleMoves;
-    }
-
 
     /**
      * Primitive actions take a direction (e.g. Direction.NORTH, Direction.NORTHEAST, etc)

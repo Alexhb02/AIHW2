@@ -329,6 +329,7 @@ public class AstarAgent extends Agent {
             tree_locations[loc.x][loc.y] = true; //converts set of resource locations into an array to store tree locations
         }
 
+        //represents the open list. The comparator is to ensure that the locations with a lower f(x) value are lower in the queue
         PriorityQueue<MapLocation> openList = new PriorityQueue<MapLocation>(new Comparator<MapLocation>() {
             @Override
             public int compare(MapLocation mapLocation, MapLocation t1) {
@@ -338,16 +339,20 @@ public class AstarAgent extends Agent {
             }
         });
 
-        Map<MapLocation, MapLocation> predecessor = new HashMap<>();
-        Map<MapLocation, Integer> cheapestPath = new HashMap<>();
-        Map<MapLocation, Integer> pathCosts = new HashMap<>();
+        Map<MapLocation, MapLocation> predecessor = new HashMap<>(); // represents the previous location on the cheapest path for a given location
+        Map<MapLocation, Integer> cheapestPath = new HashMap<>(); //represents the cheapest cost from start to a given location
+        Map<MapLocation, Integer> pathCosts = new HashMap<>(); //represents f(x) function, which is the cheapest cost plus the heuristic function for a given location
 
+        //initializes the list with their starting values
         cheapestPath.put(start, 0);
         pathCosts.put(start, heuristic(start, goal));
         openList.add(start);
 
+        //iterates through the open list
         while (!openList.isEmpty()) {
+            //grabs the location with the lowest f(x)
             MapLocation curr = openList.poll();
+            //if the lowest f(x) is the goal, then return the path to the goal
             if (curr.equals(goal)) {
                 return getPath(predecessor, curr, start);
             }
@@ -372,6 +377,13 @@ public class AstarAgent extends Agent {
         return null;
     }
 
+    /**
+     * This method takes the predecessor map and builds out the stack of map locations from start to goal.
+     * @param predecessor
+     * @param loc
+     * @param start
+     * @return path: the path taken from the start to the goal node
+     */
     private Stack<MapLocation> getPath(Map<MapLocation, MapLocation> predecessor, MapLocation loc, MapLocation start)
     {
         Stack<MapLocation> path = new Stack<MapLocation>();

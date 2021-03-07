@@ -218,6 +218,11 @@ public class AstarAgent extends Agent {
      */
     private boolean shouldReplanPath(State.StateView state, History.HistoryView history, Stack<MapLocation> currentPath)
     {
+        MapLocation nextStep = null;
+        if(state.getUnit(enemyFootmanID) != null && !currentPath.isEmpty()){
+            nextStep = currentPath.pop();
+            return (nextStep.x == state.getUnit(enemyFootmanID).getXPosition() && nextStep.y == state.getUnit(enemyFootmanID).getYPosition());
+        }
         return false;
     }
 

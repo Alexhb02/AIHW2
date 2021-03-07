@@ -356,7 +356,15 @@ public class AstarAgent extends Agent {
             Set<MapLocation> neighbors = getNeighbors(curr, xExtent, yExtent, tree_locations);
             int tempscore = cheapestPath.get(curr) + 1;
             for (MapLocation neighbor : neighbors) {
+                int cheapNeigh = Integer.MAX_VALUE;
+                cheapNeigh = cheapestPath.get(neighbor);
+                if (tempscore < cheapNeigh) {
+                    predecessor.put(neighbor, curr);
+                    cheapestPath.put(neighbor, tempscore);
+                    pathCosts.put(neighbor, tempscore + heuristic(neighbor, goal));
 
+                    openList.add(neighbor);
+                }
             }
 
         }
@@ -364,12 +372,11 @@ public class AstarAgent extends Agent {
         return null;
     }
 
-    int heuristic(MapLocation l1, MapLocation goal)
-    {
-        return 0;
+    private int heuristic(MapLocation loc, MapLocation goal) {
+        return Math.max( Math.abs(goal.x - loc.x), Math.abs(goal.y - loc.y) );
     }
 
-    private Set<MapLocation> getNeighbors(MapLocation currLoc, int xExtent, int yExtent, boolean[][] blockages)
+        private Set<MapLocation> getNeighbors(MapLocation currLoc, int xExtent, int yExtent, boolean[][] blockages)
     {
         Set<MapLocation> possibleMoves = new HashSet<>();
 

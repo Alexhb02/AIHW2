@@ -215,29 +215,25 @@ public class AstarAgent extends Agent {
     }
 
     /**
-     * You will implement this method.
+     * This method returns true when the path needs to be replanned and false otherwise, depending on whether the agent
+     * needs to replan its current path based on if the location of the enemy agent is blocking the agent from the town hall.
      *
-     * This method should return true when the path needs to be replanned
-     * and false otherwise. This will be necessary on the dynamic map where the
-     * footman will move to block your unit.
-     *
-     * You can check the position of the enemy footman with the following code:
-     * state.getUnit(enemyFootmanID).getXPosition() or .getYPosition().
-     *
-     * There are more examples of getting the positions of objects in SEPIA in the findPath method.
-     *
-     * @param state
-     * @param history
-     * @param currentPath
-     * @return
+     * @param State this variable will be used to get the enemy footman unit and the enemy's location
+     * @param history the history of the locations taken so far.
+     * @param currentPath a stack of all of the locations which the agent plans to take on its current path
+     * @return True if the agents needs to replan the current path, false otherwise
      */
     private boolean shouldReplanPath(State.StateView state, History.HistoryView history, Stack<MapLocation> currentPath)
     {
         MapLocation nextStep = null;
+        // checks if the enemyFootman exists and that there is a current path which may need replanning
         if(state.getUnit(enemyFootmanID) != null && !currentPath.isEmpty()){
+            //sets nextStep equal to the next MapLocation which the agent plans to move to
             nextStep = currentPath.pop();
+            //returns True if the next step location of the agent is the location that the enemy agent is currently occupying, false otherwise
             return (nextStep.x == state.getUnit(enemyFootmanID).getXPosition() && nextStep.y == state.getUnit(enemyFootmanID).getYPosition());
         }
+        //returns false if the current path is empty or the enemyFootman does not exist.
         return false;
     }
 
@@ -399,7 +395,7 @@ public class AstarAgent extends Agent {
      * @param currLoc MapLocation instance with the current location of the agent
      * @param xExtent Integer width of the map
      * @param yExtent Integer length of the map
-     * @param blockages 2d array boolean with entries equal to True if the given location on the map is
+     * @param blockages 2d array boolean with entries equal to True if the given location on the map is 
      *                  blocked by an obstacle and False if not.
      * @return Set<MapLocation> a set of all of the possible next steps at the given location
      */

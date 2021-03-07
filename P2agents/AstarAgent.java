@@ -381,8 +381,16 @@ public class AstarAgent extends Agent {
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
+
                 int tx = currLoc.x + i;
                 int ty = currLoc.y + j;
+
+                if (tx >= 0 && ty >= 0 && tx < xExtent && ty < yExtent) {
+                    if (!blockages[tx][ty]) {
+                        MapLocation newLocation = new MapLocation(tx, ty, null, 1 + currLoc.cost);
+                        possibleMoves.add(newLocation);
+                    }
+                }
             }
         }
 

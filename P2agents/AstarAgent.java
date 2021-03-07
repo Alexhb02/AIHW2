@@ -25,6 +25,20 @@ public class AstarAgent extends Agent {
             this.cost = cost;
         }
 
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y);
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            if (!(object instanceof MapLocation))
+                return false;
+
+            MapLocation l2 = (MapLocation) object;
+
+            return this.x == l2.x && this.y == l2.y;
+        }
     }
 
     Stack<MapLocation> path;
@@ -331,12 +345,35 @@ public class AstarAgent extends Agent {
         pathCosts.put(start, heuristic(start, goal));
         openList.add(start);
 
+        while (!openList.isEmpty()) {
+            MapLocation curr = openList.poll();
+            if (curr.equals(goal)) {
+                System.out.println("Goal Found!");
+                // TODO: implement backtracking
+                break;
+            }
+
+            Set<MapLocation> neighbors = getNeighbors(curr, xExtent, yExtent, tree_locations);
+            int tempscore = cheapestPath.get(curr) + 1;
+            for (MapLocation neighbor : neighbors) {
+
+            }
+
+        }
+
         return null;
     }
 
     int heuristic(MapLocation l1, MapLocation goal)
     {
         return 0;
+    }
+
+    private Set<MapLocation> getNeighbors(MapLocation currLoc, int xExtent, int yExtent, boolean[][] blockages)
+    {
+        Set<MapLocation> possibleMoves = new HashSet<>();
+
+        return possibleMoves;
     }
 
     /**

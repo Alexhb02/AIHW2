@@ -154,7 +154,7 @@ public class AstarAgent extends Agent {
 
         if(!path.empty() && (nextLoc == null || (footmanX == nextLoc.x && footmanY == nextLoc.y))) {
 
-            // stat moving to the next step in the path
+            // start moving to the next step in the path
             nextLoc = path.pop();
 
             System.out.println("Moving to (" + nextLoc.x + ", " + nextLoc.y + ")");

@@ -315,7 +315,7 @@ public class AstarAgent extends Agent {
         // move
         boolean[][] tree_locations = new boolean[xExtent][yExtent];
         for (MapLocation loc : resourceLocations) {
-            tree_locations[loc.x][loc.y] = true;
+            tree_locations[loc.x][loc.y] = true; //converts set of resource locations into an array to store tree locations
         }
 
         PriorityQueue<MapLocation> openList = new PriorityQueue<MapLocation>(new Comparator<MapLocation>() {

@@ -357,7 +357,8 @@ public class AstarAgent extends Agent {
             int tempscore = cheapestPath.get(curr) + 1;
             for (MapLocation neighbor : neighbors) {
                 int cheapNeigh = Integer.MAX_VALUE;
-                cheapNeigh = cheapestPath.get(neighbor);
+                if (cheapestPath.containsKey(cheapNeigh))
+                    cheapNeigh = cheapestPath.get(neighbor);
                 if (tempscore < cheapNeigh) {
                     predecessor.put(neighbor, curr);
                     cheapestPath.put(neighbor, tempscore);

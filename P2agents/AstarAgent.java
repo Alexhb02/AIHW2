@@ -349,9 +349,7 @@ public class AstarAgent extends Agent {
         while (!openList.isEmpty()) {
             MapLocation curr = openList.poll();
             if (curr.equals(goal)) {
-                System.out.println("Goal Found!");
-                // TODO: implement backtracking
-                break;
+                return getPath(predecessor, curr, start);
             }
 
             Set<MapLocation> neighbors = getNeighbors(curr, xExtent, yExtent, tree_locations);
@@ -373,6 +371,20 @@ public class AstarAgent extends Agent {
 
         return null;
     }
+
+    private Stack<MapLocation> getPath(Map<MapLocation, MapLocation> predecessor, MapLocation loc, MapLocation start)
+    {
+        Stack<MapLocation> path = new Stack<MapLocation>();
+        MapLocation pred = predecessor.get(loc);
+        while (!pred.equals(start)) {
+            path.push(pred);
+            pred = predecessor.get(pred);
+        }
+
+        return path;
+    }
+
+
     /**
      * This method takes in a given location as well as the location of the goal, and outputs the heuristic value based
      * on the Chebyshev distance equation.

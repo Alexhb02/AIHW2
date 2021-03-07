@@ -376,9 +376,15 @@ public class AstarAgent extends Agent {
         return Math.max( Math.abs(goal.x - loc.x), Math.abs(goal.y - loc.y) );
     }
 
-        private Set<MapLocation> getNeighbors(MapLocation currLoc, int xExtent, int yExtent, boolean[][] blockages)
-    {
+    private Set<MapLocation> getNeighbors(MapLocation currLoc, int xExtent, int yExtent, boolean[][] blockages) {
         Set<MapLocation> possibleMoves = new HashSet<>();
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                int tx = currLoc.x + i;
+                int ty = currLoc.y + j;
+            }
+        }
 
         return possibleMoves;
     }

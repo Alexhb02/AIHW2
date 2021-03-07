@@ -377,23 +377,47 @@ public class AstarAgent extends Agent {
 
         return null;
     }
-
+    /**
+     * This method takes in a given location as well as the location of the goal, and outputs the heuristic value based
+     * on the Chebyshev distance equation.
+     *
+     * @param loc a MapLocation instance which will be used in the heuristic function, to estimate distance from this location
+     *                    to the goal location
+     * @param goal a Maplocation instance which will be used in the heuristic function, to estimate distance from a given location
+     *      *                    to this goal location
+     * @return int an approximation of distance from given location to goal location, based on Chebyshev distance equation
+     */
     private int heuristic(MapLocation loc, MapLocation goal) {
         return Math.max( Math.abs(goal.x - loc.x), Math.abs(goal.y - loc.y) );
     }
 
+    /**
+     * This method takes in a given location (i.e. of an agent) as well as a 2d array of all blockages on the map
+     * and returns a set of every immediate possible location to move to that isn't blocked by a blockage and is
+     * within the spawn of the map.
+     *
+     * @param currLoc MapLocation instance with the current location of the agent
+     * @param xExtent Integer width of the map
+     * @param yExtent Integer length of the map
+     * @param blockages 2d array boolean with entries equal to True if the given location on the map is
+     *                  blocked by an obstacle and False if not.
+     * @return Set<MapLocation> a set of all of the possible next steps at the given location
+     */
     private Set<MapLocation> getNeighbors(MapLocation currLoc, int xExtent, int yExtent, boolean[][] blockages) {
+        //create set for all possible moves from currLoc
         Set<MapLocation> possibleMoves = new HashSet<>();
-
+        //loop through all possible horizontal and vertical single increments from current position
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (i == 0 && j == 0) continue; // Ignore the step we are already at
 
                 int tx = currLoc.x + i;
                 int ty = currLoc.y + j;
-
+                //if possible next location is within the span of the given map
                 if (tx >= 0 && ty >= 0 && tx < xExtent && ty < yExtent) {
+                    //if the possible next location is not where a blockage is also located
                     if (!blockages[tx][ty]) {
+                        //add possible next location to possibleMoves set
                         MapLocation newLocation = new MapLocation(tx, ty, null, 1 + currLoc.cost);
                         possibleMoves.add(newLocation);
                     }
